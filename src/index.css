@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#root, .container {
+  height: 100vh;
+}
+
+.node {
+  height: 100px;
+  width: 100px;
+}
