@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { bankOne, bankTwo } from '../sounds';
 import playSound from '../playSound';
 
 export default function ButtonsPanel(props) {
   return (
-    <div className='col-md-6 col-12 mx-auto'>
-        <ButtonRows isPowerOn={props.isPowerOn} preset={props.preset} />
+    <div className='col-lg-6 col-12 mx-auto'>
+        <ButtonRows isPowerOn={props.isPowerOn} preset={props.preset} setSoundName={props.setSoundName} volume={props.volume} />
     </div>
   )
 }
 
 function ButtonRows(props) {
-
-    // Change bank variable depending on state
 
     const assignButtons = props.preset.map(sound => {
         return <Button
@@ -22,6 +20,8 @@ function ButtonRows(props) {
             keyTrigger={sound.keyTrigger}
             url={sound.url}
             isPowerOn={props.isPowerOn}
+            setSoundName = {props.setSoundName}
+            volume = {props.volume}
         />
     });
 
@@ -50,25 +50,26 @@ function ButtonRows(props) {
 }
 
 function Button(props) {
-
     // Track pressed buttons
     useEffect(() => {
         const keyDownHandler = e => {
             if (e.keyCode === props.keyCode) {
-                playSound(props.url, props.isPowerOn);
+                playSound(props.url, props.volume, props.isPowerOn);
+                props.setSoundName(props.id);
             }
         };
         document.addEventListener('keydown', keyDownHandler);
 
         return () => document.removeEventListener('keydown', keyDownHandler);
-    }, [props.isPowerOn])
+    }, [props.isPowerOn, props.volume])
 
     function handleClick() {
-        playSound(props.url, props.isPowerOn);
+        playSound(props.url, props.volume, props.isPowerOn);
+        props.setSoundName(props.id);
     }
 
     return (
-        <div className='node bg-primary m-1 d-flex justify-content-center align-items-center' onClick={handleClick}>
+        <div className='node m-1 d-flex justify-content-center align-items-center' onClick={handleClick}>
             <span className='fw-bold fs-2'>{props.keyTrigger}</span>
         </div>
     );
